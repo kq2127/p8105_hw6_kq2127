@@ -1,0 +1,35 @@
+---
+title: "p8105_hw6_kq2127"
+author: "Kristal Quispe"
+date: "11/24/2019"
+output: github_document
+---
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(modelr)
+library(mgcv)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+set.seed(1)
+```
+
+# Problem 1
+
+Loading the data set
+```{r}
+bw_df = read_csv("./data/birthweight.csv")
+```
+
