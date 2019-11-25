@@ -45,15 +45,60 @@ bw_df =
 Fitting my model
 
 ```{r}
-my_model = lm(bwt ~ fincome + gaweeks + momage, data = bw_df)
+my_model = lm(bwt ~ fincome + gaweeks + blength, data = bw_df)
 ```
 
+
+Plot of Model Residuals against fitted values 
+
+```{r}
+bw_df %>% 
+  modelr::add_residuals(my_model) %>% 
+  modelr::add_predictions(my_model) %>% 
+  ggplot(aes(x = pred, y = resid)) + 
+  geom_point()
+```
 
 Other models
 
 ```{r}
 o1_model = lm(bwt ~ blength + gaweeks, data = bw_df)
-o2_model = lm(bwt ~ bhead + blength + babysex + bhead * blength + bhead * babysex + blength * babysex + bhead * blength * babysex , data = bw_df)
+o2_model = lm(bwt ~ bhead + blength + babysex + bhead * blength + bhead * babysex + blength * babysex + bhead * blength * babysex, data = bw_df)
 ```
 
+Comparing other model
+
+```{r}
+cv_df = 
+  crossv_mc(bw_df, 100) %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+```
+
+```{r}
+cv_results = 
+  cv_df %>% 
+  mutate(
+    my_mod = map(.x = train, ~lm(bwt ~ fincome + gaweeks + blength, data = .x)),
+    o1_mod = map(.x = train, ~lm(bwt ~ blength + gaweeks, data = .x)),
+    o2_mod =  map(.x = train, ~lm(bwt ~ bhead + blength + babysex + bhead * blength + bhead * babysex + blength * babysex + bhead * blength * babysex, data = .x)),
+    rmse_mymod = map2_dbl(.x = my_mod, .y = test, ~rmse(.x, .y)),
+    rmse_o1mod = map2_dbl(.x = o1_mod, .y = test, ~rmse(.x, .y)),
+    rmse_o2mod = map2_dbl(.x = o2_mod, .y = test, ~rmse(.x, .y))
+  )
+```
+
+Visualize the root mean square error for the models
+```{r}
+cv_results %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  mutate(model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+```
 
