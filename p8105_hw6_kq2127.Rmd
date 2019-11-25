@@ -107,6 +107,7 @@ cv_results %>%
   mutate(model = fct_inorder(model)) %>% 
   ggplot(aes(x = model, y = rmse)) + geom_violin()
 ```
+When you compare all three models, the last model that has all the interaction terms in it gives us the least amount of root mean square error. This makes it seems like it would be the best model, but When you add a variable to a model, you increase the R squared variable and so it may seem like a better fit when it actuallly is not. 
 
 # Problem 2
 
@@ -174,14 +175,15 @@ bs_df1%>%
   geom_density()
 ```
 
-Identifying the the 2.5% and 97.5%
+The plot shows a normal distribution for the estimate of the log of B0 and B1.  
+
+
+Identifying the the 2.5% and 97.5%. This produces us with our 95% CI
 ```{r}
 bs_df1%>%
   pull(logb0b1) %>% 
   quantile(probs = c(0.025, 0.975), na.rm =TRUE)
 ```
-
-
 
 r^2 estimates
 ```{r}
@@ -204,8 +206,11 @@ bs_df2%>%
   geom_density()
 ```
 
+The plot shows a normal distribution for the estimate of R squared. 
 
-Identifying the the 2.5% and 97.5%
+
+
+Identifying the the 2.5% and 97.5%. This produces us with our 95% CI
 ```{r}
 bs_df2%>%
   pull(r.squared) %>% 
