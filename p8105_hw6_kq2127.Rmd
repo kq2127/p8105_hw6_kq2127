@@ -40,6 +40,11 @@ bw_df =
     mrace = as.factor(mrace))
   
 ```
+Checking for missing data
+
+```{r}
+sum(is.na(bw_df))
+```
 
 
 Fitting my model
@@ -48,6 +53,7 @@ Fitting my model
 my_model = lm(bwt ~ fincome + gaweeks + blength, data = bw_df)
 ```
 
+The reason why my model includes gestational age in weeks is because its an important predictor of a baby's health and weight. The longer the child was able to be in gestation, the bigger in weight it would be. This is why premature babies are small and weigh very little, they have a shorter gestational time then regular on schedule babies. Fincome was added to my model because a babies family's social economic status is a predictor of access to health care and sufficient and quality nutrition for moms during preganancy. Baby's length is almost the same as baby's birth weight in the sense that if the baby developed ideally and had proper nutrition and health then the baby would be longer. 
 
 Plot of Model Residuals against fitted values 
 
