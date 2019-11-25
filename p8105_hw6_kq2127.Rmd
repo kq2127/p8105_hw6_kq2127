@@ -28,8 +28,32 @@ set.seed(1)
 
 # Problem 1
 
-Loading the data set
+Load and clean the data set
 ```{r}
-bw_df = read_csv("./data/birthweight.csv")
+bw_df =
+  read_csv("./data/birthweight.csv") %>% 
+  janitor::clean_names()%>% 
+  mutate (
+    babysex = as.factor(babysex),
+    frace = as.factor(frace),
+    malform = as.factor(malform),
+    mrace = as.factor(mrace))
+  
 ```
+
+
+Fitting my model
+
+```{r}
+my_model = lm(bwt ~ fincome + gaweeks + momage, data = bw_df)
+```
+
+
+Other models
+
+```{r}
+o1_model = lm(bwt ~ blength + gaweeks, data = bw_df)
+o2_model = lm(bwt ~ bhead + blength + babysex + bhead * blength + bhead * babysex + blength * babysex + bhead * blength * babysex , data = bw_df)
+```
+
 
